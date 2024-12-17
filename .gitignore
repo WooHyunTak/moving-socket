@@ -1,0 +1,15 @@
+node_modules
+# Keep environment variables out of version control
+.env
+
+dist
+
+deploy.sh
+
+.DS_Store
+
+.main.yml
+
+.http
+
+ERD.md
