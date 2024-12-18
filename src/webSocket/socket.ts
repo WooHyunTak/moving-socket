@@ -5,6 +5,13 @@ interface SocketIo {
   message?: string;
 }
 
+interface WebRTCMessage {
+  type: string;
+  targetId: number;
+  sdp?: RTCSessionDescription;
+  candidate?: RTCIceCandidate;
+}
+
 export const userSockets: { [key: string]: string } = {};
 
 // setupSocket 함수 정의 및 내보내기
@@ -52,10 +59,50 @@ export function setupSocket(io: Server) {
       }
     });
 
-    // 유저 연결 해제 시, 매핑 정보 삭제
-    socket.on("user_disconnect", (userId) => {
-      delete userSockets[userId];
-      console.log(`User ${userId} disconnected`);
+    // WebRTC 시그널링 이벤트 핸들러에 로그 추가
+    // socket.on("webrtc_offer", ({ targetId, sdp }) => {
+    //   const socketId = userSockets[targetId];
+    //   console.log("webrtc_offer", {
+    //     sdp,
+    //     fromId: socketId,
+    //   });
+    //   if (socketId) {
+    //     io.to(socketId).emit("webrtc_offer", {
+    //       sdp,
+    //       fromId: socketId,
+    //     });
+    //   }
+    // });
+
+    socket.on("webrtc_offer", ({ targetId, fromId, sdp }) => {
+      const targetSocketId = userSockets[targetId];
+
+      if (targetSocketId) {
+        io.to(targetSocketId).emit("webrtc_offer", {
+          sdp,
+          fromId: fromId, // 발신자의 실제 ID를 전달
+        });
+      }
+    });
+
+    socket.on("webrtc_answer", ({ targetId, fromId, sdp }) => {
+      const targetSocketId = userSockets[targetId];
+      if (targetSocketId) {
+        io.to(targetSocketId).emit("webrtc_answer", {
+          sdp,
+          fromId: fromId, // 발신자의 실제 ID를 전달
+        });
+      }
+    });
+
+    socket.on("webrtc_ice", ({ targetId, fromId, candidate }) => {
+      const targetSocketId = userSockets[targetId];
+      if (targetSocketId) {
+        io.to(targetSocketId).emit("webrtc_ice", {
+          candidate,
+          fromId: fromId, // 발신자의 실제 ID를 전달
+        });
+      }
     });
 
     // 소켓 연결 해제 시, 매핑 정보 삭제
