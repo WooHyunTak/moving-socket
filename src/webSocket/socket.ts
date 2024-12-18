@@ -63,10 +63,27 @@ export function setupSocket(io: Server) {
       for (const [userId, id] of Object.entries(userSockets)) {
         if (id === socket.id) {
           delete userSockets[userId];
-          console.log(`User ${userId} disconnected`);
+          console.log(
+            `User ${userId} disconnected at ${new Date().toISOString()}`
+          );
           break;
         }
       }
+    });
+
+    // 주기적으로 소켓 연결 상태 확인
+    const checkInterval = setInterval(() => {
+      for (const [userId, socketId] of Object.entries(userSockets)) {
+        if (!io.sockets.sockets.get(socketId)) {
+          delete userSockets[userId];
+          console.log(`Cleaned up inactive user ${userId}`);
+        }
+      }
+    }, 30000); // 30초마다 확인
+
+    // 소켓 연결 종료 시 인터벌 정리
+    socket.on("disconnect", () => {
+      clearInterval(checkInterval);
     });
   });
 }
