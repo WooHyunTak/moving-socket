@@ -59,21 +59,6 @@ export function setupSocket(io: Server) {
       }
     });
 
-    // WebRTC 시그널링 이벤트 핸들러에 로그 추가
-    // socket.on("webrtc_offer", ({ targetId, sdp }) => {
-    //   const socketId = userSockets[targetId];
-    //   console.log("webrtc_offer", {
-    //     sdp,
-    //     fromId: socketId,
-    //   });
-    //   if (socketId) {
-    //     io.to(socketId).emit("webrtc_offer", {
-    //       sdp,
-    //       fromId: socketId,
-    //     });
-    //   }
-    // });
-
     socket.on("webrtc_offer", ({ targetId, fromId, sdp }) => {
       const targetSocketId = userSockets[targetId];
 
