@@ -1,20 +1,28 @@
 ## Moving Service Web Socket Server
-- 이사매칭 플랫폼의 실시간 채팅을 위한 소켓 서버
 
-- 로그인된 고객과 기사의 실시간 소통을 통하여 서비스 질의 향상을 목표로 한다.
-- 상태방의 서비스 로그인상태를 확인하여 사용자로 하여금 상대방을 확인 하도록 한다.
+# 🗨️ 실시간 채팅 서버 (Socket.io + Express)
 
----
+이 프로젝트는 `socket.io`와 `express`를 사용하여 실시간 채팅을 지원하는 서버를 구축하는 프로젝트입니다.  
+사용자 로그인 시 `userId`와 `socketId`를 매핑하여 특정 사용자에게 독립적인 메시지 전송이 가능합니다.
 
-## **⚙ 기술 스택**
+## 🚀 기술 스택
 
-### Backend
+- **Node.js** - 서버 환경
+- **Express** - 백엔드 프레임워크
+- **Socket.io** - 실시간 양방향 통신
 
-<img src="https://img.shields.io/badge/express-000000?style=for-the-badge&logo=express&logoColor=white">
-WEB SOCKET.IO
+## 📌 주요 기능
 
-### 기타 Tool
+- ✅ **사용자 로그인 시 `userId`와 `socketId` 매핑**
+- ✅ **특정 사용자에게 개별 메시지 전송**
+- ✅ **전체 사용자에게 브로드캐스트 메시지 전송**
+- ✅ **사용자가 접속 종료 시 `socketId` 해제**
 
-<img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"> <img src="https://img.shields.io/badge/discord-5865F2?style=for-the-badge&logo=discord&logoColor=white"> <img src="https://img.shields.io/badge/Zoom-0B5CFF?style=for-the-badge&logo=zoom&logoColor=white"> <img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white">
+## 프로젝트 실행
+```bash
+# 패키지 설치
+npm install
 
----
+# 개발 서버 실행
+npm run dev
+```
